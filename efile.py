@@ -2,11 +2,17 @@ import re
 import os
 import os.path
 
-invoicepattern = re.compile(r'W\d\d\d\d\d\d\d')  # Regular expression for pattern matching invoice numbers
-mypath = os.getcwd()  # Get current path
+# Regular expression for pattern matching invoice numbers
+invoicepattern = re.compile(r'W\d\d\d\d\d\d\d')
+
+# Get current path
+mypath = os.getcwd()
 
 
-def getinvoicepattern(pdfname):  # Given the name of an ocr'd pdf return the invoice number
+def getinvoicepattern(pdfname):
+    """
+    Given the name of an ocr'd pdf return the invoice number
+    """
     txtname = gettxtfilename(pdfname)
     file = open(txtname)
     filestring = file.read()
