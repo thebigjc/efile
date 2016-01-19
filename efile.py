@@ -3,61 +3,60 @@ import os
 import os.path
 
 # Regular expression for pattern matching invoice numbers
-invoicepattern = re.compile(r'W\d\d\d\d\d\d\d')
+invoice_pattern = re.compile(r'W\d\d\d\d\d\d\d')
 
 # Get current path
-mypath = os.getcwd()
+my_path = os.getcwd()
 
-
-def getinvoicepattern(pdfname):
+def get_invoice_pattern(pdfname):
     """
     Given the name of an ocr'd pdf return the invoice number
     """
-    txtname = gettxtfilename(pdfname)
-    file = open(txtname)
+    txt_name = get_txt_filename(pdfname)
+    file = open(txt_name)
     filestring = file.read()
-    matchobject = invoicepattern.search(filestring)
-    if matchobject:
-        return matchobject.group()
+    match = invoice_pattern.search(filestring)
+    if match:
+        return match.group()
     else:
         print("Can't find pattern")
         return null
 
 
-def getdirectorycontents(path):
-    onlyfiles = [f for f in os.listdir(mypath) if path.isfile(path.join(mypath, f))]
-    return onlyfiles
+def get_directory_contents(path):
+    only_files = [f for f in os.listdir(my_path) if path.isfile(path.join(my_path, f))]
+    return only_files
 
 
-def getpdflist(filesindirectory):
+def get_pdf_list(files_in_directory):
     pdflist = []
-    for currentfile in filesindirectory:
-        if re.search(r'.pdf', currentfile):
-            pdflist.append(currentfile)
+    for current_file in files_in_directory:
+        if re.search(r'.pdf', current_file):
+            pdflist.append(current_file)
     return pdflist
 
 
-def gettxtfilename(pdfname):
-    namelength = len(pdfname)
-    newname = pdfname[0:namelength - 3] + "txt"
-    return newname
+def get_txt_filename(pdf_name):
+    name_length = len(pdf_name)
+    new_name = pdf_name[0:name_length - 3] + "txt"
+    return new_name
 
 
-def maketxtfile(pdfname):
-    os.system("pdftotext \"" + pdfname + "\"")
+def make_txt_file(pdf_name):
+    os.system("pdftotext \"" + pdf_name + "\"")
 
 
-def renamepdf(pdfname):
-    maketxtfile(pdfname)
-    newname = getinvoicepattern(pdfname) + ".pdf"
-    os.remove(gettxtfilename(pdfname))
-    os.renames(pdfname, newname)
+def rename_pdf(pdf_name):
+    make_txt_file(pdf_name)
+    new_name = get_invoice_pattern(pdf_name) + ".pdf"
+    os.remove(get_txt_filename(pdf_name))
+    os.renames(pdf_name, new_name)
 
 
-def renamepdfdirectory(pdflist):
-    for pdfname in pdflist:
-        renamepdf(pdfname)
+def rename_pdf_directory(pdf_list):
+    for pdf_name in pdf_list:
+        rename_pdf(pdf_name)
 
 
 ## renamepdfdirectory(getpdflist(getdirectorycontents(mypath)))
-print getdirectorycontents(mypath)
+print get_directory_contents(my_path)
