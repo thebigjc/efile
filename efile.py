@@ -1,9 +1,9 @@
 import re
-from os import listdir, getcwd, system, renames, remove
-from os.path import isfile, join
+import os
+import os.path
 
 invoicepattern = re.compile(r'W\d\d\d\d\d\d\d')  # Regular expression for pattern matching invoice numbers
-mypath = getcwd()  # Get current path
+mypath = os.getcwd()  # Get current path
 
 
 def getinvoicepattern(pdfname):  # Given the name of an ocr'd pdf return the invoice number
@@ -19,7 +19,7 @@ def getinvoicepattern(pdfname):  # Given the name of an ocr'd pdf return the inv
 
 
 def getdirectorycontents(path):
-    onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+    onlyfiles = [f for f in os.listdir(mypath) if path.isfile(path.join(mypath, f))]
     return onlyfiles
 
 
@@ -38,14 +38,14 @@ def gettxtfilename(pdfname):
 
 
 def maketxtfile(pdfname):
-    system("pdftotext \"" + pdfname + "\"")
+    os.system("pdftotext \"" + pdfname + "\"")
 
 
 def renamepdf(pdfname):
     maketxtfile(pdfname)
     newname = getinvoicepattern(pdfname) + ".pdf"
-    remove(gettxtfilename(pdfname))
-    renames(pdfname, newname)
+    os.remove(gettxtfilename(pdfname))
+    os.renames(pdfname, newname)
 
 
 def renamepdfdirectory(pdflist):
