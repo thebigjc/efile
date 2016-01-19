@@ -1,31 +1,31 @@
-import re
 import os
 import os.path
+import re
 
 # Regular expression for pattern matching invoice numbers
-invoice_pattern = re.compile(r'W\d\d\d\d\d\d\d')
+invoice_pattern = re.compile(r'W\d{7}')
 
 # Get current path
 my_path = os.getcwd()
+
 
 def get_invoice_pattern(pdfname):
     """
     Given the name of an ocr'd pdf return the invoice number
     """
     txt_name = get_txt_filename(pdfname)
-    file = open(txt_name)
-    filestring = file.read()
+    with open(txt_name) as file:
+        filestring = file.read()
+
     match = invoice_pattern.search(filestring)
     if match:
         return match.group()
-    else:
-        print("Can't find pattern")
-        return null
+
+    print("Can't find pattern")
 
 
 def get_directory_contents(path):
-    only_files = [f for f in os.listdir(my_path) if path.isfile(path.join(my_path, f))]
-    return only_files
+    return [f for f in os.listdir(my_path) if path.isfile(path.join(my_path, f))]
 
 
 def get_pdf_list(files_in_directory):
@@ -33,17 +33,16 @@ def get_pdf_list(files_in_directory):
     for current_file in files_in_directory:
         if re.search(r'.pdf', current_file):
             pdflist.append(current_file)
+
     return pdflist
 
 
 def get_txt_filename(pdf_name):
-    name_length = len(pdf_name)
-    new_name = pdf_name[0:name_length - 3] + "txt"
-    return new_name
+    return pdf_name[:-3] + "txt"
 
 
 def make_txt_file(pdf_name):
-    os.system("pdftotext \"" + pdf_name + "\"")
+    os.system('pdftotext "' + pdf_name + '"')
 
 
 def rename_pdf(pdf_name):
@@ -58,5 +57,6 @@ def rename_pdf_directory(pdf_list):
         rename_pdf(pdf_name)
 
 
-## renamepdfdirectory(getpdflist(getdirectorycontents(mypath)))
-print get_directory_contents(my_path)
+if __name__ == '__main__';
+    ## renamepdfdirectory(getpdflist(getdirectorycontents(mypath)))
+    print get_directory_contents(my_path)
